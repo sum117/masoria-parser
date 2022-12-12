@@ -9,7 +9,7 @@
 ```
 Otherwise it wont work.
 
-## Other Examples
+## Syntax Examples
 ```masoria
 # Are comments
 
