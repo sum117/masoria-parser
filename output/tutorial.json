@@ -1,0 +1,212 @@
+{
+  "scenes": [
+    {
+      "id": 1,
+      "label": "presentation",
+      "type": "story",
+      "choices": [],
+      "nextSceneId": 2,
+      "dialogue": [
+        {
+          "emotion": "frowning",
+          "text": "Olá, eu sou a Alice, a cientista-chefe da A.N.A.N.T.A. Eu estou aqui para te ajudar a se registrar no nosso sistema depois que você terminar de ler as coisas desse canal. Volte aqui quando pudermos começar!",
+          "character": "alice"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "askingName",
+      "type": "condition",
+      "choices": [],
+      "condition": "nameCollector",
+      "nextSceneId": 3,
+      "dialogue": [
+        {
+          "emotion": "smiling",
+          "text": "Ótimo! Primeiro, preciso saber seu nome. Por favor, digite-o abaixo (com um máximo de 32 caracteres. Precisamos disso pra impedir que existam apelidos difíceis de marcar no servidor).",
+          "character": "alice"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "nameReceived",
+      "type": "story",
+      "choices": [],
+      "nextSceneId": 4,
+      "dialogue": [
+        {
+          "emotion": "blushing",
+          "text": "Que nome bonito!\n\n*Alice passa um tempo te observando e você nota ela corando um pouco.*",
+          "character": "alice"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "label": "menuSpawner",
+      "type": "condition",
+      "choices": [],
+      "condition": "roleSelectMenuSpawner",
+      "nextSceneId": 5,
+      "dialogue": [
+        {
+          "emotion": "smiling",
+          "text": "Eu vou te mostrar um painel para você pegar seus cargos, pode ser? Você pode abrir ele a qualquer momento com o comando `/cargos`. Espere um pouco... (10 segundos)",
+          "character": "alice"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "label": "menuSpawned",
+      "type": "story",
+      "choices": [],
+      "nextSceneId": 6,
+      "dialogue": [
+        {
+          "emotion": "waving",
+          "text": "Pronto, agora selecione os seus cargos!\n\nNão se preocupe com a mensagem. Ela será apagada em breve.",
+          "character": "alice"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "label": "userRushing",
+      "type": "story",
+      "choices": [
+        {
+          "label": "Quero ir direto pro chat geral",
+          "targetScene": "badGoodbye"
+        },
+        {
+          "label": "Quero que você explique as coisas",
+          "targetScene": "explain"
+        }
+      ],
+      "nextSceneId": 7,
+      "dialogue": [
+        {
+          "emotion": "sad",
+          "text": "Já tô vendo que você tá com pressa, né? Você quer que eu explique as coisas ou quer ir direto pro chat geral?",
+          "character": "alice"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "label": "badGoodbye",
+      "type": "ending",
+      "choices": [],
+      "nextSceneId": 0,
+      "dialogue": [
+        {
+          "emotion": "sad",
+          "text": "...Tudo bem... se você quiser, pode voltar aqui quando quiser e eu vou te explicar tudo direitinho.\n\n*Alice parece um pouco triste com sua pressa, e tem medo que você tenha dificuldades no servidor, mas confia em você e vai embora.*",
+          "character": "alice"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "label": "explain",
+      "type": "story",
+      "choices": [],
+      "nextSceneId": 9,
+      "dialogue": [
+        {
+          "emotion": "bookShy",
+          "text": "Ah... que bom...!\n\n*Alice fica bem vermelha novamente, e você nota que ela está um pouco nervosa. Não demora até ela tirar um livro do jaleco e começar a ler.*",
+          "character": "alice"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "label": "allianceTemptation",
+      "type": "story",
+      "choices": [
+        {
+          "label": "Vou considerar a sua aliança",
+          "targetScene": "considerIt"
+        },
+        {
+          "label": "Sua aliança não me interessa",
+          "targetScene": "notConsiderIt"
+        },
+        {
+          "label": "Talvez...",
+          "targetScene": "notConsiderIt"
+        }
+      ],
+      "nextSceneId": 10,
+      "dialogue": [
+        {
+          "emotion": "bookShy",
+          "text": "Ei, na hora de escolher a aliança, considera a minha? A aliança da A.N.A.N.T.A. é a melhor, e eu posso te ajudar a se tornar um cientista de verdade!\n\n*Alice olha ao redor para ter certeza que ninguém está olhando. Ela parece um pouco triste, mas você nota que ela está tentando te convencer.*\n\nClaro que se você não gostar da minha, você pode escolher outra...",
+          "character": "alice"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "label": "considerIt",
+      "type": "story",
+      "choices": [],
+      "nextSceneId": 11,
+      "dialogue": [
+        {
+          "emotion": "blushing",
+          "text": "Ótimo! Nós poderemos passar bastante tempo juntos, então!\n\n*Alice fica vermelha, e parece feliz com sua escolha.*",
+          "character": "alice"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "label": "notConsiderIt",
+      "type": "story",
+      "choices": [],
+      "nextSceneId": 12,
+      "dialogue": [
+        {
+          "emotion": "bookSad",
+          "text": "...Ah... bom, que pena... isso quer dizer que talvez nos tornemos rivais, né? Mas tudo bem, eu entendo...",
+          "character": "alice"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "label": "goodGoodbye",
+      "type": "ending",
+      "choices": [],
+      "nextSceneId": 0,
+      "dialogue": [
+        {
+          "emotion": "smiling",
+          "text": "Enfim... depois que escolher sua aliança, raça e classe, você pode fazer um personagem para ganhar acesso ao resto do servidor. Vá para a guia de personagem e explore os canais para se familiarizar, afinal, você vai usá-la várias vezes, se a gente tiver sorte de ter você por bastante tempo! ❤️\n\n*Alice fala isso enquanto olha para você com um sorriso no rosto.*",
+          "character": "alice"
+        },
+        {
+          "emotion": "waving",
+          "text": "Enfim... depois que escolher sua aliança, raça e classe, você pode fazer um personagem para ganhar acesso ao resto do servidor. Vá para a guia de personagem e explore os canais para se familiarizar, afinal, você vai usá-la várias vezes, se a gente tiver sorte de ter você por bastante tempo! ❤️\n\n*Alice fala isso enquanto olha para você com um sorriso no rosto.*",
+          "character": "alice"
+        }
+      ]
+    }
+  ],
+  "characters": {
+    "alice": {
+      "frowning": "data/Characters/Alice/AliceFrowning.png",
+      "smiling": "data/Characters/Alice/AliceSmiling.png",
+      "blushing": "data/Characters/Alice/AliceBlushing.png",
+      "waving": "data/Characters/Alice/AliceWaving.png",
+      "sad": "data/Characters/Alice/AliceSad.png",
+      "bookShy": "data/Characters/Alice/AliceBookShy.png",
+      "bookSad": "data/Characters/Alice/AliceBookSad.png"
+    }
+  }
+}

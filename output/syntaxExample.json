@@ -1,0 +1,81 @@
+{
+  "scenes": [
+    {
+      "id": 1,
+      "label": "sceneName",
+      "type": "condition",
+      "choices": [],
+      "condition": "optionalCondition",
+      "nextSceneId": 2,
+      "dialogue": [
+        {
+          "emotion": "emotionName1",
+          "text": "characterSpeech",
+          "character": "characterName"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "sceneName2",
+      "type": "story",
+      "choices": [
+        {
+          "label": "promptText",
+          "targetScene": "sceneName3"
+        },
+        {
+          "label": "promptText",
+          "targetScene": "sceneName4"
+        }
+      ],
+      "nextSceneId": 3,
+      "dialogue": [
+        {
+          "emotion": "emotionName1",
+          "text": "characterSpeech",
+          "character": "characterName"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "sceneName3",
+      "type": "ending",
+      "choices": [],
+      "nextSceneId": 0,
+      "dialogue": [
+        {
+          "emotion": "emotionName1",
+          "text": "characterSpeech",
+          "character": "characterName"
+        },
+        {
+          "emotion": "emotionName2",
+          "text": "characterSpeech",
+          "character": "characterName"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "label": "sceneName4",
+      "type": "story",
+      "choices": [],
+      "nextSceneId": 5,
+      "dialogue": [
+        {
+          "emotion": "emotionName2",
+          "text": "characterSpeech",
+          "character": "characterName"
+        }
+      ]
+    }
+  ],
+  "characters": {
+    "characterName": {
+      "emotionName1": "path/to/file.png",
+      "emotionName2": "path/to/file2.png"
+    }
+  }
+}
