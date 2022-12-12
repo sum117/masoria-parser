@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 
 function parseScript(script: string) {
-  const lines = script.split('\n').filter((line) => line.trim().length > 0);
+  const lines = script.split('\n').filter((line) => line.length > 0);
 
   const characters: any = {};
   const scenes: Scene[] = [];
@@ -216,9 +216,9 @@ export default function (scriptPath: string) {
         .map((emotion) => {
           return {
             emotion: emotion.emotionName,
-            text: parsed.result.dialogues.find(
-              (dialogue) => dialogue.sceneId === scene.id,
-            )?.text,
+            text: parsed.result.dialogues
+              .filter((dialogue) => dialogue.sceneId === scene.id)
+              ?.map((dialogue) => dialogue.text),
             character: emotion.character,
           };
         }),
