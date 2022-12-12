@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 
 function parseScript(script: string) {
-  const lines = script.split('\n');
+  const lines = script.split('\n').filter((line) => line.trim().length > 0);
 
   const characters: any = {};
   const scenes: Scene[] = [];
@@ -29,7 +29,7 @@ function parseScript(script: string) {
 
   let currentScene: Scene = { ...emptyScene };
   let currentEmotion: Emotion = { ...emptyEmotion };
-  let currentText: Dialogue = { ...emptyDialogue };
+  let currentDialogue: Dialogue = { ...emptyDialogue };
   let currentChoices: Choice[] = [];
 
   let currentCharName = '';
@@ -134,9 +134,9 @@ function parseScript(script: string) {
           index++;
           fullSpeech += '\n\n' + lines[index].trim();
         }
-        currentText.character = currentCharName;
-        currentText.text = fullSpeech;
-        currentText.sceneId = sceneIndex;
+        currentDialogue.character = currentCharName;
+        currentDialogue.text = fullSpeech;
+        currentDialogue.sceneId = sceneIndex;
 
         break;
       case isChoiceDeclaration:
@@ -171,13 +171,12 @@ function parseScript(script: string) {
 
     scenes.push(currentScene);
     emotions.push(currentEmotion);
-    dialogues.push(currentText);
+    dialogues.push(currentDialogue);
     choices.push(currentChoices);
-    currentText = { ...emptyDialogue };
+    currentDialogue = { ...emptyDialogue };
     currentEmotion = { ...emptyEmotion };
-    currentChoices = [];
-
     currentScene = { ...emptyScene };
+    currentChoices = [];
   }
 
   const result = {

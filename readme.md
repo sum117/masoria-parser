@@ -2,14 +2,29 @@
 
 > A vanilla parser that I made for my visual novel project, Masoria. It's not very good, but it works for my purposes. I'm not planning on updating it, but I'm releasing it in case anyone wants to use it for their own projects.
 
+## How to implement
+
+```ts
+import parser from './parser';
+import { writeFileSync } from 'fs';
+const path = 'scripts/tutorial.masoria';
+
+const script = parser(path);
+
+writeFileSync('output/tutorial.json', JSON.stringify(script, null, 2));
+```
+
 ✅ Output comes in json. if you want to multiline, do:
+
 ```masoria
     [characterName]: characterSpeech
         characterSpeech
 ```
+
 Otherwise it wont work.
 
 ## Syntax Examples
+
 ```masoria
 # Are comments
 
