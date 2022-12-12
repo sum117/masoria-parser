@@ -85,7 +85,7 @@
     {
       "id": 6,
       "label": "userRushing",
-      "type": "story",
+      "type": "choice",
       "choices": [
         {
           "label": "Quero ir direto pro chat geral",
@@ -96,7 +96,7 @@
           "targetScene": "explain"
         }
       ],
-      "nextSceneId": 7,
+      "nextSceneId": null,
       "dialogue": [
         {
           "emotion": "sad",
@@ -143,7 +143,7 @@
     {
       "id": 9,
       "label": "allianceTemptation",
-      "type": "story",
+      "type": "choice",
       "choices": [
         {
           "label": "Vou considerar a sua aliança",
@@ -158,7 +158,7 @@
           "targetScene": "notConsiderIt"
         }
       ],
-      "nextSceneId": 10,
+      "nextSceneId": null,
       "dialogue": [
         {
           "emotion": "bookShy",

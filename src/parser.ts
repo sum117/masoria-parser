@@ -196,10 +196,16 @@ export default function (scriptPath: string) {
   const script = readFileSync(scriptPath, 'utf-8');
   const parsed = parseScript(script);
   const scenes = parsed.result.scenes.map((scene) => {
+    const hasChoice = parsed.result.choices
+      .flat()
+      .some((choice) => choice.sceneId === scene.id)
+      ? 'choice'
+      : scene.type;
+
     return {
       id: scene.id as number,
       label: scene.label as string,
-      type: scene.type as 'ending' | 'story' | 'choice' | 'condition',
+      type: hasChoice,
       choices: parsed.result.choices
         .flat()
         .filter((choice) => choice.sceneId === scene.id)
@@ -210,7 +216,7 @@ export default function (scriptPath: string) {
           };
         }),
       condition: scene.condition,
-      nextSceneId: scene.nextSceneId,
+      nextSceneId: hasChoice === 'choice' ? null : scene.nextSceneId,
       dialogue: parsed.result.emotions
         .filter((emotion) => emotion.sceneId === scene.id)
         .map((emotion) => {
