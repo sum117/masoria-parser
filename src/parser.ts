@@ -190,11 +190,11 @@ function makeScene(line: string): Scene {
   labelCondition = labelCondition.replace(":", "");
   const { string: label, parameter } = getParameter(labelCondition);
   return {
-    label: label.trim(),
+    label: label,
     isEndingScene: false,
     condition: parameter,
     dialogues: [],
-    nextScene: pointedScene ? pointedScene.trim().replace(":", "") : undefined,
+    nextScene: pointedScene ? pointedScene.replace(":", "") : undefined,
   };
 }
 
@@ -212,7 +212,7 @@ function makeCharacter(line: string): Character {
   }
   const [_keyword, name] = removeExtraSpaces(line).split(" ");
   return {
-    name: name.trim().replace(":", ""),
+    name: name.replace(":", ""),
     emotions: {},
   };
 }
