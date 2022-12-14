@@ -1,5 +1,3 @@
-import { readFileSync } from "fs";
-
 type ParserResult = {
   scenes: Scene[];
   characters: Character[];
