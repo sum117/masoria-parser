@@ -1,4 +1,4 @@
-character alice =
+character alice:
     emotion frowning: data/Characters/Alice/AliceFrowning.png
     emotion smiling: data/Characters/Alice/AliceSmiling.png
     emotion blushing: data/Characters/Alice/AliceBlushing.png
@@ -68,7 +68,7 @@ scene allianceTemptation:
     choice<notConsiderIt>: Sua aliança não me interessa
     choice<notConsiderIt>: Talvez...
 
-scene considerIt:
+scene considerIt -> goodGoobye:
     use emotion alice blushing
 
     [alice]: Ótimo! Nós poderemos passar bastante tempo juntos, então!
