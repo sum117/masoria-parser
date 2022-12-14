@@ -1,6 +1,8 @@
 # Masoria Visual Novel Parser
 
-![logoMasoria](LogoMasoria.png)
+<p align="center">
+  <image src="https://github.com/sum117/masoria-lang/blob/master/LogoMasoria.png">
+</p>
 
 > A vanilla parser that I made for my visual novel project, Masoria. It's not very good, but it works for my purposes. I'm not planning on updating it, but I'm releasing it in case anyone wants to use it for their own projects.
 
