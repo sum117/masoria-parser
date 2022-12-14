@@ -4,6 +4,7 @@ type ParserResult = {
   scenes: Scene[];
   characters: Character[];
 };
+
 type Scene = {
   label: string;
   nextScene?: string;
@@ -17,13 +18,14 @@ type Scene = {
 type Dialogue = {
   character: string;
   emotion: string;
-  text: string;
+  text: string[];
 };
 
 type Choice = {
   label: string;
   targetScene: string;
 };
+
 type Character = {
   name: string;
   emotions: {
@@ -38,10 +40,8 @@ enum Keyword {
   Emotion = "emotion",
   UseEmotion = "use emotion",
   Character = "character",
+  CharacterBracket = "[",
 }
-
-const script = readFileSync("scripts/tutorial.masoria", "utf-8");
-console.log(main(script));
 
 export default function main(script: string): ParserResult {
   const scenes: Scene[] = [];
@@ -64,16 +64,24 @@ export default function main(script: string): ParserResult {
         break;
       case hasKeyword(Keyword.Scene, line, 0):
         const newScene = makeScene(line);
-        if (currentScene) {
-          currentScene.nextScene = currentScene.nextScene ?? newScene.label;
-          newScene.previousScene = currentScene.label;
-          scenes.push(currentScene);
-        }
-        currentScene = newScene;
+        currentScene = submitScene(currentScene, newScene, scenes);
+        break;
+      case hasKeyword(Keyword.EndingScene, line, 0):
+        const parsedLine = removeExtraSpaces(line)
+          .split(" ")
+          .slice(1)
+          .join(" ");
+        const newEndingScene = makeScene(parsedLine, true);
+        currentScene = submitScene(currentScene, newEndingScene, scenes);
         break;
       case hasKeyword(Keyword.Choice, line, 1):
         addChoice(line, currentScene);
-
+        break;
+      case hasKeyword(Keyword.UseEmotion, line, 1):
+        addDialogueEmotion(line, currentScene);
+        break;
+      case hasKeyword(Keyword.CharacterBracket, line, 1):
+        addDialogueText(line, currentScene, lines);
         break;
     }
   }
@@ -86,6 +94,89 @@ export default function main(script: string): ParserResult {
   }
 
   return { scenes: organizeSceneRefs(scenes), characters };
+}
+/**
+ * @function submitScene
+ * @description This function handles the logic of the initial scene references, and returns the currentScene to be reassigned.
+ * @param currentScene The currentScene from the loop.
+ * @param newScene The new Scene.
+ * @param scenes The main scenes array.
+ * @returns
+ */
+function submitScene(
+  currentScene: Scene | undefined,
+  newScene: Scene,
+  scenes: Scene[]
+) {
+  if (currentScene) {
+    currentScene.nextScene = currentScene.nextScene ?? newScene.label;
+    newScene.previousScene = currentScene.label;
+    scenes.push(currentScene);
+  }
+  currentScene = newScene;
+  return currentScene;
+}
+
+/**
+ * @function addDialogueText
+ * @description This function runs an internal loop inside the while loop to check for additional lines after the character block dialogue.
+ * @param line The line to parse
+ * @param currentScene The current scene from the loop
+ * @param lines The remainder of the lines to check for additional dialogue (without characte blocks)
+ */
+function addDialogueText(
+  line: string,
+  currentScene: Scene | undefined,
+  lines: string[]
+) {
+  const [characterBlock, text] = line.split(":");
+  const characterName = characterBlock.substring(
+    characterBlock.indexOf("[") + 1,
+    characterBlock.indexOf("]")
+  );
+  const currentDialogue =
+    currentScene?.dialogues[currentScene.dialogues.length - 1];
+  if (currentDialogue) {
+    currentDialogue.character = characterName;
+    currentDialogue.text.push(text.trim());
+    for (const lineToCheck of lines) {
+      const trimmedLine = removeExtraSpaces(lineToCheck);
+      const isKeywordInLine = Object.values(Keyword).some((key) =>
+        trimmedLine.startsWith(key)
+      );
+
+      if (isKeywordInLine) {
+        break;
+      }
+
+      currentDialogue.text.push(trimmedLine);
+    }
+  }
+}
+
+/**
+ * @function addDialogueEmotion
+ * @description This function creates a dialogue with emotions since emotions come before the dialogue text. Always.
+ * @param line The line to parse
+ * @param currentScene The current scene of the loop
+ */
+function addDialogueEmotion(
+  line: string,
+  currentScene: Scene | undefined
+): void {
+  const [_useKeyword, _emotionKeyword, characterName, emotionName] =
+    removeExtraSpaces(line).split(" ");
+  let dialogues = currentScene?.dialogues;
+  const newDialogue = {
+    character: characterName,
+    emotion: emotionName,
+    text: [],
+  };
+  if (dialogues) {
+    dialogues.push(newDialogue);
+  } else {
+    dialogues = [newDialogue];
+  }
 }
 
 /**
@@ -178,7 +269,7 @@ function getParameter(string: string): Record<string, string> {
  * @param line The line to parse
  * @returns {Scene} A scene object
  */
-function makeScene(line: string): Scene {
+function makeScene(line: string, isEndingScene = false): Scene {
   if (hasForbiddenInline(line)) {
     throw new Error(
       "Inline instructions are forbidden in this context (scenes)!"
@@ -191,7 +282,7 @@ function makeScene(line: string): Scene {
   const { string: label, parameter } = getParameter(labelCondition);
   return {
     label: label,
-    isEndingScene: false,
+    isEndingScene,
     condition: parameter,
     dialogues: [],
     nextScene: pointedScene ? pointedScene.replace(":", "") : undefined,
@@ -287,6 +378,9 @@ function organizeSceneRefs(scenes: Scene[]): Scene[] {
       ref.choices.includes(scene.label)
     );
     scene.previousScene = reference ? reference.parent : scene.previousScene;
+    if (scene.choices) {
+      scene.nextScene = undefined;
+    }
     return scene;
   });
 }

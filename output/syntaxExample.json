@@ -1,0 +1,88 @@
+{
+    "scenes": [
+        {
+            "label": "sceneName",
+            "isEndingScene": false,
+            "condition": "optionalCondition",
+            "dialogues": [
+                {
+                    "character": "characterName",
+                    "emotion": "emotionName1",
+                    "text": [
+                        "characterSpeech"
+                    ]
+                }
+            ],
+            "nextScene": "sceneName2"
+        },
+        {
+            "label": "sceneName2",
+            "isEndingScene": false,
+            "dialogues": [
+                {
+                    "character": "characterName",
+                    "emotion": "emotionName1",
+                    "text": [
+                        "characterSpeech"
+                    ]
+                }
+            ],
+            "previousScene": "sceneName",
+            "choices": [
+                {
+                    "label": "promptText",
+                    "targetScene": "sceneName3"
+                },
+                {
+                    "label": "promptText",
+                    "targetScene": "sceneName4"
+                }
+            ]
+        },
+        {
+            "label": "sceneName3",
+            "isEndingScene": true,
+            "dialogues": [
+                {
+                    "character": "characterName",
+                    "emotion": "emotionName1",
+                    "text": [
+                        "characterSpeech"
+                    ]
+                },
+                {
+                    "character": "characterName",
+                    "emotion": "emotionName2",
+                    "text": [
+                        "characterSpeech"
+                    ]
+                }
+            ],
+            "nextScene": "sceneName4",
+            "previousScene": "sceneName2"
+        },
+        {
+            "label": "sceneName4",
+            "isEndingScene": false,
+            "dialogues": [
+                {
+                    "character": "characterName",
+                    "emotion": "emotionName2",
+                    "text": [
+                        "characterSpeech"
+                    ]
+                }
+            ],
+            "previousScene": "sceneName2"
+        }
+    ],
+    "characters": [
+        {
+            "name": "characterName",
+            "emotions": {
+                "emotionName1": "path/to/file.png",
+                "emotionName2": "path/to/file2.png"
+            }
+        }
+    ]
+}

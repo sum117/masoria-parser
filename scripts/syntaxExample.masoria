@@ -1,4 +1,4 @@
-character characterName =
+character characterName:
     emotion emotionName1: path/to/file.png
     emotion emotionName2: path/to/file2.png
 
