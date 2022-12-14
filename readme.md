@@ -32,7 +32,7 @@ npm i masoria-lang
 ## Implementation
 
 ```ts
-import parser from ".";
+import parser from "masoria-lang";
 import { readFileSync, writeFileSync } from "fs";
 
 const fileName = "tutorial";
