@@ -11,7 +11,7 @@
 ## Installation
 
 ```bash
-npm i masoria-lang
+npm i masoria-parser
 ```
 
 ## Summary
