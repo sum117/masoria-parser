@@ -1,9 +1,12 @@
 {
-  "name": "masoria-lang",
-  "version": "1.0.2",
+  "name": "masoria-parser",
+  "version": "1.0.0",
+  "description": "A novel syntax parser built in typescript!",
+  "type": "module",
   "license": "MIT",
   "main": "dist/index.js",
-  "description": "A novel syntax parser built in typescript!",
+  "exports": "./dist/index.js",
+  "typings": "dist/index.d.ts",
   "homepage": "https://github.com/masoria-lang",
   "scripts": {
     "build": "tsc"

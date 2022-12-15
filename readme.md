@@ -1,7 +1,7 @@
 # Masoria Visual Novel Parser
 
 <p align="center">
-  <image src="https://github.com/sum117/masoria-lang/blob/master/LogoMasoria.png">
+  <image src="https://github.com/sum117/masoria-lang/blob/master/assets/LogoMasoria.png">
 </p>
 
 > A vanilla parser that I made for my visual novel project, Masoria. It's not very good, but it works for my purposes. I'm not planning on updating it, but I'm releasing it in case anyone wants to use it for their own projects.
@@ -32,7 +32,7 @@ npm i masoria-lang
 ## Implementation
 
 ```ts
-import parser from "masoria-lang";
+import parser from "masoria-parser";
 import { readFileSync, writeFileSync } from "fs";
 
 const fileName = "tutorial";

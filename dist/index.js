@@ -1,5 +1,3 @@
-"use strict";
-exports.__esModule = true;
 var Keyword;
 (function (Keyword) {
     Keyword["Scene"] = "scene";
@@ -10,14 +8,14 @@ var Keyword;
     Keyword["Character"] = "character";
     Keyword["CharacterBracket"] = "[";
 })(Keyword || (Keyword = {}));
-function main(script) {
-    var scenes = [];
-    var characters = [];
-    var lines = getLines(script);
-    var currentScene;
-    var currentCharacter;
+export default function main(script) {
+    const scenes = [];
+    const characters = [];
+    const lines = getLines(script);
+    let currentScene;
+    let currentCharacter;
     while (lines.length > 0) {
-        var line = lines.shift();
+        const line = lines.shift();
         switch (true) {
             case hasKeyword(Keyword.Character, line, 0):
                 if (currentCharacter) {
@@ -29,15 +27,15 @@ function main(script) {
                 addEmotion(line, currentCharacter);
                 break;
             case hasKeyword(Keyword.Scene, line, 0):
-                var newScene = makeScene(line);
+                const newScene = makeScene(line);
                 currentScene = submitScene(currentScene, newScene, scenes);
                 break;
             case hasKeyword(Keyword.EndingScene, line, 0):
-                var parsedLine = removeExtraSpaces(line)
+                const parsedLine = removeExtraSpaces(line)
                     .split(" ")
                     .slice(1)
                     .join(" ");
-                var newEndingScene = makeScene(parsedLine, true);
+                const newEndingScene = makeScene(parsedLine, true);
                 currentScene = submitScene(currentScene, newEndingScene, scenes);
                 break;
             case hasKeyword(Keyword.Choice, line, 1):
@@ -57,9 +55,8 @@ function main(script) {
     if (currentCharacter) {
         characters.push(currentCharacter);
     }
-    return { scenes: organizeSceneRefs(scenes), characters: characters };
+    return { scenes: organizeSceneRefs(scenes), characters };
 }
-exports["default"] = main;
 /**
  * @function submitScene
  * @description This function handles the logic of the initial scene references, and returns the currentScene to be reassigned.
@@ -69,9 +66,8 @@ exports["default"] = main;
  * @returns
  */
 function submitScene(currentScene, newScene, scenes) {
-    var _a;
     if (currentScene) {
-        currentScene.nextScene = (_a = currentScene.nextScene) !== null && _a !== void 0 ? _a : newScene.label;
+        currentScene.nextScene = currentScene.nextScene ?? newScene.label;
         newScene.previousScene = currentScene.label;
         scenes.push(currentScene);
     }
@@ -86,27 +82,19 @@ function submitScene(currentScene, newScene, scenes) {
  * @param lines The remainder of the lines to check for additional dialogue (without characte blocks)
  */
 function addDialogueText(line, currentScene, lines) {
-    var _a = line.split(":"), characterBlock = _a[0], text = _a[1];
-    var characterName = characterBlock.substring(characterBlock.indexOf("[") + 1, characterBlock.indexOf("]"));
-    var currentDialogue = currentScene === null || currentScene === void 0 ? void 0 : currentScene.dialogues[currentScene.dialogues.length - 1];
+    const [characterBlock, text] = line.split(":");
+    const characterName = characterBlock.substring(characterBlock.indexOf("[") + 1, characterBlock.indexOf("]"));
+    const currentDialogue = currentScene?.dialogues[currentScene.dialogues.length - 1];
     if (currentDialogue) {
         currentDialogue.character = characterName;
         currentDialogue.text.push(text.trim());
-        var _loop_1 = function (lineToCheck) {
-            var trimmedLine = removeExtraSpaces(lineToCheck);
-            var isKeywordInLine = Object.values(Keyword).some(function (key) {
-                return trimmedLine.startsWith(key);
-            });
+        for (const lineToCheck of lines) {
+            const trimmedLine = removeExtraSpaces(lineToCheck);
+            const isKeywordInLine = Object.values(Keyword).some((key) => trimmedLine.startsWith(key));
             if (isKeywordInLine) {
-                return "break";
+                break;
             }
             currentDialogue.text.push(trimmedLine);
-        };
-        for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
-            var lineToCheck = lines_1[_i];
-            var state_1 = _loop_1(lineToCheck);
-            if (state_1 === "break")
-                break;
         }
     }
 }
@@ -117,12 +105,12 @@ function addDialogueText(line, currentScene, lines) {
  * @param currentScene The current scene of the loop
  */
 function addDialogueEmotion(line, currentScene) {
-    var _a = removeExtraSpaces(line).split(" "), _useKeyword = _a[0], _emotionKeyword = _a[1], characterName = _a[2], emotionName = _a[3];
-    var dialogues = currentScene === null || currentScene === void 0 ? void 0 : currentScene.dialogues;
-    var newDialogue = {
+    const [_useKeyword, _emotionKeyword, characterName, emotionName] = removeExtraSpaces(line).split(" ");
+    let dialogues = currentScene?.dialogues;
+    const newDialogue = {
         character: characterName,
         emotion: emotionName,
-        text: []
+        text: [],
     };
     if (dialogues) {
         dialogues.push(newDialogue);
@@ -137,8 +125,7 @@ function addDialogueEmotion(line, currentScene) {
  * @param line The line to check for extra spaces
  * @returns The line without extra spaces
  */
-function removeExtraSpaces(line) {
-    if (line === void 0) { line = ""; }
+function removeExtraSpaces(line = "") {
     return line.replace(/\s+/g, " ").trim();
 }
 /**
@@ -148,7 +135,7 @@ function removeExtraSpaces(line) {
  * @returns An array of lines
  */
 function getLines(script) {
-    return script.split("\n").filter(function (line) { return line.trim().length > 0; });
+    return script.split("\n").filter((line) => line.trim().length > 0);
 }
 /**
  * @function isKeyword
@@ -158,9 +145,8 @@ function getLines(script) {
  * @param level The indentation level of the keyword
  * @returns True if the line starts with the keyword and the indentation level is correct, false otherwise
  */
-function hasKeyword(keyword, line, level) {
-    if (level === void 0) { level = 0; }
-    var hasKey = line.toLowerCase().trim().startsWith(keyword);
+function hasKeyword(keyword, line, level = 0) {
+    const hasKey = line.toLowerCase().trim().startsWith(keyword);
     if (hasKey) {
         return isIndentationLevelCorrect(line, level);
     }
@@ -172,9 +158,8 @@ function hasKeyword(keyword, line, level) {
  * @param line Line to check
  * @returns True if the line has an inline instruction, false otherwise
  */
-function hasForbiddenInline(line) {
-    if (line === void 0) { line = ""; }
-    var _a = line.split(":"), _instruction = _a[0], text = _a[1];
+function hasForbiddenInline(line = "") {
+    const [_instruction, text] = line.split(":");
     if (text.trim().length > 0) {
         return true;
     }
@@ -187,11 +172,10 @@ function hasForbiddenInline(line) {
  * @param level The level of indentation. Every level is 4 spaces
  * @returns True if the indentation level is correct, false otherwise
  */
-function isIndentationLevelCorrect(line, level) {
-    if (line === void 0) { line = ""; }
-    var indentation = line.match(/^(\s*)/);
+function isIndentationLevelCorrect(line = "", level) {
+    const indentation = line.match(/^(\s*)/);
     if (indentation) {
-        var spaces = indentation[0].length;
+        const spaces = indentation[0].length;
         return spaces % 2 === 0 && spaces / 4 === level;
     }
     return false;
@@ -204,11 +188,11 @@ function isIndentationLevelCorrect(line, level) {
  */
 function getParameter(string) {
     if (!string.includes("<")) {
-        return { string: string };
+        return { string };
     }
-    var parameter = string.substring(string.indexOf("<") + 1, string.indexOf(">"));
-    string = string.replace("<".concat(parameter, ">"), "");
-    return { string: string, parameter: parameter };
+    const parameter = string.substring(string.indexOf("<") + 1, string.indexOf(">"));
+    string = string.replace(`<${parameter}>`, "");
+    return { string, parameter };
 }
 /**
  * @function makeScene
@@ -216,20 +200,19 @@ function getParameter(string) {
  * @param line The line to parse
  * @returns {Scene} A scene object
  */
-function makeScene(line, isEndingScene) {
-    if (isEndingScene === void 0) { isEndingScene = false; }
+function makeScene(line, isEndingScene = false) {
     if (hasForbiddenInline(line)) {
         throw new Error("Inline instructions are forbidden in this context (scenes)!");
     }
-    var _a = removeExtraSpaces(line).split(" "), _keyword = _a[0], labelCondition = _a[1], _pointer = _a[2], pointedScene = _a[3];
+    let [_keyword, labelCondition, _pointer, pointedScene] = removeExtraSpaces(line).split(" ");
     labelCondition = labelCondition.replace(":", "");
-    var _b = getParameter(labelCondition), label = _b.string, parameter = _b.parameter;
+    const { string: label, parameter } = getParameter(labelCondition);
     return {
         label: label,
-        isEndingScene: isEndingScene,
+        isEndingScene,
         condition: parameter,
         dialogues: [],
-        nextScene: pointedScene ? pointedScene.replace(":", "") : undefined
+        nextScene: pointedScene ? pointedScene.replace(":", "") : undefined,
     };
 }
 /**
@@ -242,10 +225,10 @@ function makeCharacter(line) {
     if (hasForbiddenInline(line)) {
         throw new Error("Inline instructions are forbidden in this context (characters)!");
     }
-    var _a = removeExtraSpaces(line).split(" "), _keyword = _a[0], name = _a[1];
+    const [_keyword, name] = removeExtraSpaces(line).split(" ");
     return {
         name: name.replace(":", ""),
-        emotions: {}
+        emotions: {},
     };
 }
 /**
@@ -258,14 +241,14 @@ function addChoice(line, currentScene) {
     if (!currentScene) {
         throw new Error("Choice must be inside a scene!");
     }
-    var _a = line.split(":"), instruction = _a[0], label = _a[1];
-    var targetScene = getParameter(instruction).parameter;
+    const [instruction, label] = line.split(":");
+    const targetScene = getParameter(instruction).parameter;
     if (!targetScene) {
         throw new Error("Choice must have a target scene!");
     }
-    var choice = {
+    const choice = {
         label: label.trim(),
-        targetScene: targetScene
+        targetScene,
     };
     if (currentScene.choices) {
         currentScene.choices.push(choice);
@@ -284,8 +267,8 @@ function addEmotion(line, currentCharacter) {
     if (!currentCharacter) {
         throw new Error("Emotion must be inside a character!");
     }
-    var _a = line.split(":"), instruction = _a[0], emotionPath = _a[1];
-    var _b = removeExtraSpaces(instruction).split(" "), _keyword = _b[0], emotionName = _b[1];
+    const [instruction, emotionPath] = line.split(":");
+    const [_keyword, emotionName] = removeExtraSpaces(instruction).split(" ");
     if (!emotionPath) {
         throw new Error("An emotion declaration must have a path!");
     }
@@ -298,19 +281,17 @@ function addEmotion(line, currentCharacter) {
  * @returns The scenes with the previousScene property set correctly
  */
 function organizeSceneRefs(scenes) {
-    var references = scenes.reduce(function (acc, scene) {
+    const references = scenes.reduce((acc, scene) => {
         if (scene.choices) {
             acc.push({
                 parent: scene.label,
-                choices: scene.choices.map(function (choice) { return choice.targetScene; })
+                choices: scene.choices.map((choice) => choice.targetScene),
             });
         }
         return acc;
     }, []);
-    return scenes.map(function (scene) {
-        var reference = references.find(function (ref) {
-            return ref.choices.includes(scene.label);
-        });
+    return scenes.map((scene) => {
+        const reference = references.find((ref) => ref.choices.includes(scene.label));
         scene.previousScene = reference ? reference.parent : scene.previousScene;
         if (scene.choices) {
             scene.nextScene = undefined;

@@ -1,4 +1,4 @@
-import parser from "masoria-lang";
+import parser from "./index";
 import { readFileSync, writeFileSync } from "fs";
 
 const fileName = "syntaxExample";
